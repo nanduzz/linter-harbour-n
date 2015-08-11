@@ -5,7 +5,7 @@
   "description": "Lint Harbour using hbmk2",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AtomLinter/linter-harbour-n"
+    "url": "https://github.com/nanduzz/linter-harbour-n"
   },
   "license": "MIT",
   "engines": {
@@ -21,12 +21,12 @@
       }
     }
   },
-  "readme": "# linter-javac\n\nThis package will lint your `.prg` opened files in Atom through [hbhmk2](http://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html).\n\n## Installation\n\n* Install [java](http://www.java.com/).\n* `$ apm install linter` (if you don't have [AtomLinter/Linter](https://github.com/AtomLinter/Linter) installed).\n* `$ apm install linter-javac`\n\n## Settings\nYou can configure linter-javac by editing ~/.atom/config.cson (choose Open Your Config in Atom menu):\n\n    'linter-javac':\n      'javaExecutablePath': null # java path. run 'which javac' to find the path\n\n## Other available linters\nThere are other linters available - take a look at the linters [mainpage](https://github.com/AtomLinter/Linter).\n\n## Donation\n[![Share the love!](https://chewbacco-stuff.s3.amazonaws.com/donate.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KXUYS4ARNHCN8)\n",
+  "readme": "",
   "readmeFilename": "README.md",
   "bugs": {
-    "url": "https://github.com/AtomLinter/linter-harbour-n/issues"
+    "url": "https://github.com/nanduzz/linter-harbour-n/issues"
   },
-  "homepage": "https://github.com/AtomLinter/linter-javac",
+  "homepage": "https://github.com/nanduzz/linter-harbour-n",
   "_id": "linter-harbour-n@1.0.1",
   "_shasum": "3b15758ac3f847c22a859dfad2c4dfc5cf735c7c",
   "_resolved": "file:..\\d-115710-4744-29ry0m\\package.tgz",
