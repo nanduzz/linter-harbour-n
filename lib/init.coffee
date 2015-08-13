@@ -1,5 +1,6 @@
-{BufferedProcess, CompositeDisposable} = require 'atom'
+{CompositeDisposable} = require 'atom'
 path = require 'path'
+fs = require 'fs'
 helpers = require 'atom-linter'
 
 module.exports =
@@ -7,7 +8,15 @@ module.exports =
     hbmk2ExecutablePath:
       type: 'string'
       title: 'Path to hbmk2 file'
-      default: 'C:\\Program Files (x86)\\SG Sistemas\\Projeto SGTrainee\\harbour\\bin\\hbmk2.exe'
+      default: 'c:\\hb30\\bin\\hbmk2.exe'
+    hbmk2Options:
+      type: 'string'
+      title: 'Options to compile separated by semicolon(;)'
+      default: '-n;-s;-w3;-es1;-q0'
+    hbmk2Includes:
+      type: 'string'
+      title: 'Includes to compile separated by semicolon(;)'
+      default: '.\\;.\\include'
 
   activate: ->
     console.log 'Linter Harbour N Active'
@@ -15,6 +24,13 @@ module.exports =
     @subscriptions.add atom.config.observe 'linter-harbour-n.hbmk2ExecutablePath',
       (newValue) =>
         @hbmk2ExecutablePath = newValue
+    @subscriptions.add atom.config.observe 'linter-harbour-n.hbmk2Options',
+      (newValue) =>
+        @hbmk2Options = newValue
+    @subscriptions.add atom.config.observe 'linter-harbour-n.hbmk2Includes',
+      (newValue) =>
+        @hbmk2Includes = newValue
+
   deactivate: ->
     @subscriptions.dispose()
 
@@ -24,20 +40,27 @@ module.exports =
     lintOnFly: false       # Only lint on save
     lint: (textEditor) =>
       filePath = textEditor.getPath()
-      wd = path.dirname filePath
-      # Use the text editor's working directory as the classpath.
-      #  TODO: Make the classpath user configurable.
-      messages = []
-      #args = ['-Xlint:all', '-n -s -w3 -es1 -q0', wd, filePath]
-      args = [filePath, '-n', '-s','-w3', '-es1', '-q0']
+
+      # Split strint into array
+      hbmk2Includes = @hbmk2Includes.split ';'
+      hbmk2Options  = @hbmk2Options.split ';'
+
+      # Add -i for header's path
+      hbmk2Includes[x] = "-i" + hbmk2Includes[x] for include, x in hbmk2Includes
+
+      # Arguments to hbmk2
+      args = [filePath]
+      args = args.concat hbmk2Options
+      args = args.concat hbmk2Includes
+
       helpers.exec(@hbmk2ExecutablePath, args, {stream: 'stderr'})
         .then (val) => return @parse(val, textEditor)
 
-  parse: (javacOutput, textEditor) ->
+  parse: (harbourOutput, textEditor) ->
     # Regex to match the error/warning line
     errRegex = /(\w+\.prg)\((\d+)\) (\w+) (.+)/ # criado por mim
     # Split into lines
-    lines = javacOutput.split /\r?\n/
+    lines = harbourOutput.split /\r?\n/
     messages = []
     for line in lines
       if line.match errRegex
